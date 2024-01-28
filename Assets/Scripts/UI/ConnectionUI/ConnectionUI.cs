@@ -26,6 +26,8 @@ namespace FootBallNet.UI
             _createRoomPanel.ClickCreateRoomBtnClilEvent -= ShowChooseColorPanel;
             _joinRoomPanel.ClickCreateRoomBtnEvent -= ShowCreateRoomBtn;
             _joinRoomPanel.ClickRoomBtnEvent -= ShowChooseColorPanel;
+
+            Engine.GetService<ColorsService>().PlayerChooseColorEvent -= OnPlayerChooseColor;
         }
 
         private void ShowJoinRoomBtn()

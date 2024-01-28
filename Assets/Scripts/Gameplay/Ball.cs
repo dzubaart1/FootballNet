@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using UnityEngine;
 
 namespace FootBallNet.Gameplay
@@ -10,6 +12,9 @@ namespace FootBallNet.Gameplay
 
         private Rigidbody _rigidbody;
         private int _scoreAmount = 1;
+        private bool _isUsed;
+
+        private Player _shootPlayer;
 
         private void Awake()
         {
@@ -21,9 +26,11 @@ namespace FootBallNet.Gameplay
             StartCoroutine(BulletDisable());
         }
 
-        public void Activate(Weapon weapon)
+        public void Activate(Weapon weapon, Player shootPlayer)
         {
-            var force = weapon.ShootPoint.forward * weapon.BulletSpeed;
+            _shootPlayer = shootPlayer;
+
+            var force = weapon.ShootPoint.forward * weapon.BallSpeed;
             _scoreAmount = weapon.ScoreAmount;
 
             transform.position = weapon.ShootPoint.position;
@@ -31,15 +38,18 @@ namespace FootBallNet.Gameplay
             _rigidbody.AddForce(force);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision collision)
         {
-            /*if (!other.TryGetComponent<IHealth>(out var health))
+            if (_isUsed || !collision.gameObject.TryGetComponent<Gate>(out var gate) || !gate.IsInitailized)
             {
                 return;
             }
 
-            health.ApplyDamage(_damage);
-            gameObject.SetActive(false);*/
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Engine.RPC(nameof(Engine.NetworkBehaviour.RPC_RemovePointToGate), Photon.Pun.RpcTarget.MasterClient, gate.ID, _scoreAmount, _shootPlayer);
+                _isUsed = true;
+            }
         }
 
         private IEnumerator BulletDisable()
@@ -48,6 +58,7 @@ namespace FootBallNet.Gameplay
 
             _rigidbody.velocity = new Vector3(0, 0, 0);
             gameObject.SetActive(false);
+            _isUsed = false;
         }
 
     }

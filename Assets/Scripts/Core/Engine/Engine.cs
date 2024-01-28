@@ -37,6 +37,7 @@ namespace FootBallNet
             AddService(new CachedService());
             AddService(new GatesService());
             AddService(new ColorsService());
+            AddService(new ScoresService());
 
             var services = _services.Values.ToList();
             

@@ -13,7 +13,7 @@ namespace FootBallNet
     {
         public event Action<IReadOnlyCollection<RoomInfo>> UpdatedRoomsListEvent;
         public event Action<Player> PlayerLeftRoomEvent;
-        public event Action<Player> PlayerEneteredRoom;
+        public event Action<Player> PlayerEneteredRoomEvent;
         public event Action JoinedRoomEvent;
 
         public NetPlayer.NetworkPlayer NetworkPlayer { get; private set; }
@@ -73,7 +73,9 @@ namespace FootBallNet
                
                 var networkPlayer = PhotonNetwork.Instantiate("NetworkPlayer", Vector3.zero, Quaternion.identity, 0, new[] { PhotonNetwork.MasterClient }).GetComponent<NetPlayer.NetworkPlayer>();
                 Engine.GetService<NetworkService>().SetCurrentNetworkPlayer(networkPlayer);
-                PlayerEneteredRoom?.Invoke(PhotonNetwork.MasterClient);
+                PlayerEneteredRoomEvent?.Invoke(PhotonNetwork.MasterClient);
+
+                Engine.GetService<ColorsService>().InitAvailabaleColorsByDefault();
             }
 
             JoinedRoomEvent?.Invoke();
@@ -101,7 +103,7 @@ namespace FootBallNet
                 Engine.RPC(nameof(Engine.NetworkBehaviour.RPC_SetCurrentNetworkPlayer), newPlayer, networkPlayer.GetID());
                 
                 Debug.Log("Player Enter Room Master");
-                PlayerEneteredRoom?.Invoke(newPlayer);
+                PlayerEneteredRoomEvent?.Invoke(newPlayer);
                 PhotonNetwork.NickName = "Master";
             }
             else

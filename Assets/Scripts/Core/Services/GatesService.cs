@@ -26,10 +26,9 @@ namespace FootBallNet
             _playersGates = new Dictionary<Gate, Player>();
 
             _sceneSwitchingService = Engine.GetService<SceneSwitchingService>();
-            _networkService = Engine.GetService<NetworkService>();
-            _networkService.PlayerEneteredRoom += OnPlayerEntetered;
-
             _sceneSwitchingService.SceneLoadedEvent += SpawnGates;
+            _networkService = Engine.GetService<NetworkService>();
+            _networkService.PlayerEneteredRoomEvent += OnPlayerEntetered;
 
             _gatesHolder = Engine.CreateObject("GatesHolder").GetComponent<Transform>();
 
@@ -60,6 +59,11 @@ namespace FootBallNet
             }
 
             throw new Exception("There is not gate in the storage");
+        }
+
+        public Player GetPlayerByGate(int gateID)
+        {
+            return _playersGates[GetGateByID(gateID)];
         }
 
         public void SetLocalPlayerGate(Gate gate)
@@ -136,6 +140,7 @@ namespace FootBallNet
         public override void DestroyService()
         {
             _sceneSwitchingService.SceneLoadedEvent -= SpawnGates;
+            _networkService.PlayerEneteredRoomEvent -= OnPlayerEntetered;
         }
 
         public override void ResetService()

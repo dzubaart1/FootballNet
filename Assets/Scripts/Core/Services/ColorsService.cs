@@ -27,7 +27,9 @@ namespace FootBallNet
             _inputService = Engine.GetService<InputService>();
             _gatesService = Engine.GetService<GatesService>();
 
-            InitAvailabaleColorsByDefault();
+            _playersColors = new Dictionary<int, Player>();
+
+            _networkService.PlayerEneteredRoomEvent += OnPlayerEnteredRoom;
             return Task.CompletedTask;
         }
 
@@ -35,12 +37,36 @@ namespace FootBallNet
         {
             LocalPlayerColorID = colorID;
 
+            _inputService.LocalPlayer.Weapon.SetWeaponColor(Configuration.ColorsList[colorID]);
             Engine.RPC(nameof(Engine.NetworkBehaviour.RPC_RegisterPlayerColorsRequest), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer, _networkService.NetworkPlayer.photonView.ViewID, colorID);
             PlayerChooseColorEvent?.Invoke();
         }
+
+        public int[] GetAvailableColorsArray()
+        {
+            List<int> _list = new List<int>();
+            foreach(var color in _playersColors.Keys)
+            {
+                if(_playersColors[color] == null)
+                {
+                    _list.Add(color);
+                }
+            }
+            return _list.ToArray();
+        }
+
+        public void InitAvailabaleColors(int[] colors)
+        {
+            foreach(var colorId in colors)
+            {
+                _playersColors.Add(colorId, null);
+            }
+
+            InitColorsListEvent?.Invoke();
+        }
+
         public void InitAvailabaleColorsByDefault()
         {
-            _playersColors = new Dictionary<int, Player>();
             for (int i = 0; i < Configuration.ColorsList.Count; i++)
             {
                 _playersColors.Add(i, null);
@@ -88,6 +114,11 @@ namespace FootBallNet
                 }
             }
             Debug.Log(s);
+        }
+
+        private void OnPlayerEnteredRoom(Player player)
+        {
+            Engine.RPC(nameof(Engine.NetworkBehaviour.RPC_InitAvailableColorsRequest), PhotonNetwork.MasterClient, player);
         }
 
         public override void DestroyService()

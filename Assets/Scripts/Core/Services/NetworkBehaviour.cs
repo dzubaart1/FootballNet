@@ -44,6 +44,14 @@ namespace FootBallNet
         }
 
         [PunRPC]
+        public void RPC_InitAvailableColorsRequest(Player owner)
+        {
+            var colorsService = Engine.GetService<ColorsService>();
+
+            Engine.RPC(nameof(RPC_InitAvailableColors), owner, colorsService.GetAvailableColorsArray());
+        }
+
+        [PunRPC]
         public void RPC_TryInitPlayerColorsRequest(Player player, Player owner, int photonViewID)
         {
             var colorsService = Engine.GetService<ColorsService>();
@@ -92,6 +100,45 @@ namespace FootBallNet
             gatesService.SetLocalPlayerGate(gate);
             
             inputService.LocalPlayer.transform.position = gate.transform.position;
+            inputService.LocalPlayer.transform.rotation = gate.transform.rotation;
+            inputService.LocalPlayer.transform.position += inputService.LocalPlayer.transform.forward;
+        }
+
+        [PunRPC]
+        public void RPC_Fire(int photonViewID, float speed)
+        {
+            var networkPlayer = PhotonNetwork.GetPhotonView(photonViewID).GetComponent<NetPlayer.NetworkPlayer>();
+            networkPlayer.Weapon.Shoot(speed, networkPlayer.Player);
+        }
+
+        [PunRPC]
+        public void RPC_RemovePointToGate(int gateID, int score, Player shootPlayer)
+        {
+            var scoresService = Engine.GetService<ScoresService>();
+            var gatesService = Engine.GetService<GatesService>();
+
+            int scoreAmountRemove = scoresService.RemovePlayerScore(gatesService.GetPlayerByGate(gateID), score);
+            int scoreAmountAdd = scoresService.AddPlayerScore(shootPlayer, score);
+
+            Engine.RPC(nameof(RPC_UpdateGateScore), RpcTarget.All, gateID, scoreAmountRemove);
+            Engine.RPC(nameof(RPC_UpdateGateScore), RpcTarget.All, gatesService.GetGateByPlayer(shootPlayer).ID, scoreAmountAdd);
+        }
+
+        [PunRPC]
+        public void RPC_UpdateGateScore(int gateID, int score)
+        {
+            var gatesService = Engine.GetService<GatesService>();
+
+            var gate = gatesService.GetGateByID(gateID);
+            gate.UpdateScore(score);
+        }
+
+        [PunRPC]
+        public void RPC_InitAvailableColors(int[] colors)
+        {
+            var colorsService = Engine.GetService<ColorsService>();
+
+            colorsService.InitAvailabaleColors(colors);
         }
     }
 }

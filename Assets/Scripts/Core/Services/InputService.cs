@@ -36,6 +36,9 @@ namespace FootBallNet
         }
 
         public override void ResetService() { }
-        public override void DestroyService() { }
+        public override void DestroyService()
+        {
+            _colorsService.PlayerChooseColorEvent -= OnPLayerChooseColor;
+        }
     }
 }

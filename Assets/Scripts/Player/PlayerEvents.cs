@@ -64,7 +64,7 @@ namespace FootBallNet.NetPlayer
                     ""name"": """",
                     ""id"": ""a1ef8cd8-e0d9-43bb-83c7-06a03a2b108a"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""SlowTap(duration=1.401298E-45)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LBMouse"",

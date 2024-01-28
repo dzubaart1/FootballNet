@@ -14,14 +14,14 @@ namespace FootBallNet.UI
         private void Awake()
         {
             _colorsService = Engine.GetService<ColorsService>();
-            //_colorsService.InitColorsListEvent += InitColorsScrollView;
+            _colorsService.InitColorsListEvent += InitColorsScrollView;
 
             InitColorsScrollView();
         }
 
         private void OnDestroy()
         {
-            //_colorsService.InitColorsListEvent -= InitColorsScrollView;
+            _colorsService.InitColorsListEvent -= InitColorsScrollView;
         }
 
         private void InitColorsScrollView()

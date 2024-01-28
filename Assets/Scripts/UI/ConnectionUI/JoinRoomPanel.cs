@@ -24,6 +24,7 @@ namespace FootBallNet.UI
 
         private void OnDestroy()
         {
+            Engine.GetService<NetworkService>().UpdatedRoomsListEvent -= OnRoomListUpdate;
             _backBtn.onClick.RemoveListener(OnClickBackBtn);
         }
 

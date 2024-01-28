@@ -1,24 +1,25 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 namespace FootBallNet.Gameplay
 {
-    public class Weapon : MonoBehaviourPun
+    public class Weapon : MonoBehaviour
     {
         public Transform ShootPoint => _spawnPoint;
-        public float BulletSpeed => _bulletSpeed;
+        public float BallSpeed => _ballSpeed;
         public int ScoreAmount => _scoreAmount;
 
         [SerializeField] private float _timeBetweenSingleShoot = 0.5f;
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private Ball _ballPrefab;
         [SerializeField] private Transform _spawnPoint;
-        [SerializeField] private float _bulletSpeed;
         [SerializeField] private int _scoreAmount;
 
         private double _lastSingleShoot;
         private bool _isShooting;
         private Color _weaponColor;
+        private float _ballSpeed;
         private CachedService _cachedService;
 
         private void Awake()
@@ -37,23 +38,24 @@ namespace FootBallNet.Gameplay
             _meshRenderer.material.color = color;
         }
 
-        public void Shoot()
+        public void DisableMesh()
         {
+            _meshRenderer.enabled = false;
+        }
+
+        public void Shoot(float speed, Player shootPlayer)
+        {
+            _ballSpeed = speed;
+
             if (_lastSingleShoot + _timeBetweenSingleShoot <= PhotonNetwork.Time)
             {
-                Engine.RPC(nameof(RPC_Fire), RpcTarget.All);
+                Engine.GetService<CachedService>().Spawn(_ballPrefab).Activate(this, shootPlayer);
                 _lastSingleShoot = PhotonNetwork.Time;
                 return;
             }
 
             var ball = _cachedService.Spawn(_ballPrefab);
             ball.transform.position = _spawnPoint.position;
-        }
-
-        [PunRPC]
-        public void RPC_Fire()
-        {
-            Engine.GetService<CachedService>().Spawn(_ballPrefab).Activate(this);
         }
     }
 }
