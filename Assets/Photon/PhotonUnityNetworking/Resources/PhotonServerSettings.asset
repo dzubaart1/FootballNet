@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
+  m_Name: PhotonServerSettings
+  m_EditorClassIdentifier: 
+  AppSettings:
+    AppIdRealtime: 5e5fd897-4e66-4315-beb9-e014e60243c7
+    AppIdFusion: 
+    AppIdChat: 
+    AppIdVoice: 
+    AppVersion: 
+    UseNameServer: 1
+    FixedRegion: eu
+    Server: 
+    Port: 0
+    ProxyServer: 
+    Protocol: 0
+    EnableProtocolFallback: 1
+    AuthMode: 0
+    EnableLobbyStatistics: 0
+    NetworkLogging: 1
+  DevRegion: eu
+  PunLogging: 0
+  EnableSupportLogger: 0
+  RunInBackground: 1
+  StartInOfflineMode: 0
+  RpcList:
+  - ClickRpc
+  - DestroyRpc
+  - DestroySpaceship
+  - Fire
+  - RespawnSpaceship
+  - RPC_ActivateObject
+  - RPC_LoadScene
+  - RPC_SetNetworkObjectParentAsNetworkHolder
+  - RPC_UnloadScene
+  - RPC_ChangePlayerPosition
+  - RPC_SetCurrentNetworkPlayer
+  - RPC_ChangePlayerColor
+  - RPC_SetColorsList
+  - RPC_ChangeGateColor
+  - RPC_ChangeNetworkPlayerWeaponColor
+  - RPC_InitColorsList
+  - RPC_InitPlayersColorService
+  - RPC_InitPlayersGateService
+  - RPC_InitAvailabaleColorsList
+  - RPC_RegisterPlayerColor
+  - RPC_GetGateRequest
+  - RPC_UpdatePlayerColors
+  - RPC_UpdatePlayerColorsRequest
+  - RPC_UpdatePlayerGate
+  - RPC_RegisterPlayerColorsRequest
+  - RPC_TryInitPlayerColorsRequest
+  - RPC_Fire
+  - Shoot
+  - RPC_AddPointToPlayer
+  - RPC_UpdateGateScore
+  - RPC_AddPointToGate
+  - RPC_TryInitGateScoresRequest
+  - RPC_RemovePointToGate
+  DisableAutoOpenWizard: 1
+  ShowSettings: 1
+  DevRegionSetOnce: 1
