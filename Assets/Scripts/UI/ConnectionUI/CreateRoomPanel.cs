@@ -9,7 +9,8 @@ namespace FootBallNet.UI
 {
     public class CreateRoomPanel : MonoBehaviour
     {
-        public event Action ClickBackBtnEvent;
+        public event Action ClickBackBtnClickEvent;
+        public event Action ClickCreateRoomBtnClilEvent;
 
         [SerializeField] private TMP_InputField _roomNameText;
         [SerializeField] private Button _createRoomBtn;
@@ -31,7 +32,7 @@ namespace FootBallNet.UI
 
         private void OnClickBackBtn()
         {
-            ClickBackBtnEvent?.Invoke();
+            ClickBackBtnClickEvent?.Invoke();
         }
 
         private void OnClickCreateBtn()
@@ -41,11 +42,15 @@ namespace FootBallNet.UI
                 return;
             }
 
+            ClickCreateRoomBtnClilEvent?.Invoke();
+
             var options = new RoomOptions();
             options.MaxPlayers = Convert.ToByte(MAX_PLAYERS_COUNT);
             options.IsVisible = true;
-
+            options.PublishUserId = true;
+            
             var res = PhotonNetwork.CreateRoom(_roomNameText.text, options);
+            Engine.GetService<SceneSwitchingService>().LoadScene((int)EScene.PlayScene);
         }
     }
 }

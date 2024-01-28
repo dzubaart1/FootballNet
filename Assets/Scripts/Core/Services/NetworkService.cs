@@ -12,8 +12,8 @@ namespace FootBallNet
         ILobbyCallbacks, IWebRpcCallback, IErrorInfoCallback
     {
         public event Action<IReadOnlyCollection<RoomInfo>> UpdatedRoomsListEvent;
-        public event Action<Player> PlayerEnteredRoomEvent;
         public event Action<Player> PlayerLeftRoomEvent;
+        public event Action<Player> PlayerEneteredRoom;
         public event Action JoinedRoomEvent;
 
         public NetPlayer.NetworkPlayer NetworkPlayer { get; private set; }
@@ -32,6 +32,7 @@ namespace FootBallNet
 
         public void SetCurrentNetworkPlayer(NetPlayer.NetworkPlayer networkPlayer)
         {
+            Debug.Log("Set current Network Player");
             NetworkPlayer = networkPlayer;
         }
 
@@ -69,6 +70,10 @@ namespace FootBallNet
                     .GetComponent<NetworkBehaviour>();
                 networkBehaviour.transform.SetParent(Engine.Behaviour.transform);
                 Engine.InitializeNetworkBehaviour(networkBehaviour);
+               
+                var networkPlayer = PhotonNetwork.Instantiate("NetworkPlayer", Vector3.zero, Quaternion.identity, 0, new[] { PhotonNetwork.MasterClient }).GetComponent<NetPlayer.NetworkPlayer>();
+                Engine.GetService<NetworkService>().SetCurrentNetworkPlayer(networkPlayer);
+                PlayerEneteredRoom?.Invoke(PhotonNetwork.MasterClient);
             }
 
             JoinedRoomEvent?.Invoke();
@@ -89,10 +94,15 @@ namespace FootBallNet
             
             if (PhotonNetwork.IsMasterClient)
             {
+                var colorsService = Engine.GetService<ColorsService>();
+                var gatesService = Engine.GetService<GatesService>();
+
                 var networkPlayer = PhotonNetwork.Instantiate("NetworkPlayer", Vector3.zero, Quaternion.identity, 0, new []{newPlayer}).GetComponent<NetPlayer.NetworkPlayer>();
+                Engine.RPC(nameof(Engine.NetworkBehaviour.RPC_SetCurrentNetworkPlayer), newPlayer, networkPlayer.GetID());
                 
-                
-                PlayerEnteredRoomEvent?.Invoke(newPlayer);
+                Debug.Log("Player Enter Room Master");
+                PlayerEneteredRoom?.Invoke(newPlayer);
+                PhotonNetwork.NickName = "Master";
             }
             else
             {

@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: ru
+    FixedRegion: eu
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: ru
+  DevRegion: eu
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -43,6 +43,25 @@ MonoBehaviour:
   - RPC_LoadScene
   - RPC_SetNetworkObjectParentAsNetworkHolder
   - RPC_UnloadScene
+  - RPC_ChangePlayerPosition
+  - RPC_SetCurrentNetworkPlayer
+  - RPC_ChangePlayerColor
+  - RPC_SetColorsList
+  - RPC_ChangeGateColor
+  - RPC_ChangeNetworkPlayerWeaponColor
+  - RPC_InitColorsList
+  - RPC_InitPlayersColorService
+  - RPC_InitPlayersGateService
+  - RPC_InitAvailabaleColorsList
+  - RPC_RegisterPlayerColor
+  - RPC_GetGateRequest
+  - RPC_UpdatePlayerColors
+  - RPC_UpdatePlayerColorsRequest
+  - RPC_UpdatePlayerGate
+  - RPC_RegisterPlayerColorsRequest
+  - RPC_TryInitPlayerColorsRequest
+  - RPC_Fire
+  - Shoot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

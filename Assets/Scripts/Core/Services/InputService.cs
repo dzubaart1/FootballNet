@@ -8,23 +8,31 @@ namespace FootBallNet
 {
     public class InputService : Service<InputConfiguration>
     {
-        public ETargetPlatform Platform = ETargetPlatform.Auto;
-
+        public PlayerEvents PlayerEvents { get; private set; }
         public Camera Camera { get; private set; }
         public LocalPlayer LocalPlayer { get; private set; } = null;
 
+        private ColorsService _colorsService;
+
         public override Task InitializeServiceAsync()
-        {       
+        {
+            PlayerEvents = new PlayerEvents();
+
+            LocalPlayer = Engine.Instantiate(Configuration.LocalPlayer);
+
+            _colorsService = Engine.GetService<ColorsService>();
+            _colorsService.PlayerChooseColorEvent += OnPLayerChooseColor;
+
             var obj = Engine.CreateObject("InputManager", null, typeof(EventSystem));
-
-
             obj.AddComponent<InputSystemUIInputModule>();
-            Camera = Engine.CreateObject("CameraManager", null, typeof(Camera)).GetComponent<Camera>();
 
-            Camera.transform.position = Configuration.AdminCameraPosition;
-            Camera.transform.eulerAngles = Configuration.AdminCameraRotation;
-            
             return Task.CompletedTask;
+        }
+
+        public void OnPLayerChooseColor()
+        {
+            PlayerEvents.Enable();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public override void ResetService() { }

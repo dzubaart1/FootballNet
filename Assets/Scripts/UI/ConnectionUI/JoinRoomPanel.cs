@@ -9,6 +9,7 @@ namespace FootBallNet.UI
 {
     public class JoinRoomPanel : MonoBehaviour
     {
+        public event Action ClickRoomBtnEvent;
         public event Action ClickCreateRoomBtnEvent;
 
         [SerializeField] private Transform _roomsItemsParent;
@@ -33,6 +34,7 @@ namespace FootBallNet.UI
 
         private void OnRoomListUpdate(IReadOnlyCollection<RoomInfo> roomList)
         {
+            Debug.Log($"RoomList Count: {roomList.Count}");
             foreach (var roomItem in roomList)
             {
                 var obj = Instantiate(_roomListItem, _roomsItemsParent);
@@ -44,6 +46,8 @@ namespace FootBallNet.UI
         private void JoinToRoom(string roomName)
         {
             PhotonNetwork.JoinRoom(roomName);
+            Engine.GetService<SceneSwitchingService>().LoadScene((int)EScene.PlayScene);
+            ClickRoomBtnEvent?.Invoke();
         }
     }
 }

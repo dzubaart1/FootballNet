@@ -31,12 +31,12 @@ namespace FootBallNet
             _configurationProvider = configurationProvider;
 
             AddService(new InputService());
-            AddService(new AudioService());
             AddService(new SceneSwitchingService());
             AddService(new UIService());
             AddService(new NetworkService());
             AddService(new CachedService());
-            AddService(new NetworkCachedService());
+            AddService(new GatesService());
+            AddService(new ColorsService());
 
             var services = _services.Values.ToList();
             

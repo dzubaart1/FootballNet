@@ -91,8 +91,6 @@ namespace FootBallNet
 
         private void UpdateScene(int sceneIndex, AsyncOperation operation, EScene scene)
         {
-            //Engine.GetService<UIService>().GetUI<LoadingUI>().StartSceneLoading(scene, operation);
-            
             _currentScene = sceneIndex;
             
             if (_currentScene != -1)

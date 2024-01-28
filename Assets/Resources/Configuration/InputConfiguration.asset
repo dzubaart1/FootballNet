@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7962ca5b0a7aaa3428bf015b89e499db, type: 3}
   m_Name: InputConfiguration
   m_EditorClassIdentifier: 
+  LocalPlayer: {fileID: 8938582547992070431, guid: 9b82573afa468c74b808ae43ac12f5ee, type: 3}
   AdminCameraPosition: {x: 0, y: 3.26, z: 3.76}
   AdminCameraRotation: {x: 36, y: 180, z: 0}

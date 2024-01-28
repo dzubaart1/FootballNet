@@ -23,14 +23,6 @@ namespace FootBallNet
             SetVisibility(!HideOnLoad);
         }
 
-        private void Start()
-        {
-            if (Engine.GetService<InputService>().Platform != ETargetPlatform.VR)
-            {
-                ChangeRenderMode(RenderMode.ScreenSpaceOverlay);
-            }
-        }
-
         public void SetVisibility(bool isVisible)
         {
             CanvasGroup.interactable = isVisible;
